@@ -1,0 +1,59 @@
+// app global css in SCSS form
+// app global css in SCSS form
+* {
+    box-sizing: border-box;
+  }
+
+.nunito{
+    font-family: 'nunito', sans-serif;
+}
+
+// app global css in Stylus form
+@font-face {
+    font-family: nunito;
+    src: url(./fonts/nunito.woff);
+}
+
+  
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'nunito', sans-serif;
+  }
+
+  p {
+    margin-bottom: 0px;
+  }
+  
+  
+  .q-field--outlined .q-field__control {
+    height: 45px !important;
+  }
+  
+  .q-tab__label {
+    font-size: 21px;
+  }
+  
+  .q-option-group--inline > div{
+    margin-left:0;
+  }
+  
+  .q-radio__inner{
+    font-size:15px !important;
+  }
+  
+  @media screen and (max-width: 740px) {
+    .q-tab__label {
+      font-size: 12px;
+    }
+  }
+  
+  
+  @media screen and (max-width: 1024px) {
+    .q-field--outlined .q-field__control {
+      height: 34px !important;
+    }
+  }
+  
