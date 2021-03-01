@@ -16,7 +16,7 @@
         <Tabs />
       </div>
       <div class="borderT"></div>
-      <div class="col-xs-12 col-sm-6 col-md-5">
+      <div class="row justify-center col-xs-12 col-sm-6 col-md-5">
         <Policy />
       </div>
     </div>
