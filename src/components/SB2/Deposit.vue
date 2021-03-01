@@ -17,7 +17,6 @@
         </p>
       </div>
 
-
       <template>
         <div class="progress">
           <Progress
@@ -25,11 +24,46 @@
             :currentValue="currentCap"
             :totalValue="totalValue"
             :percent="currentCap / totalValue"
-            :timeout="'60 ngày'"
+            :timeout="'3 ngày'"
             :backers="backers"
           />
         </div>
+      </template>
 
+      <template>
+        <div class="step1" v-if="step1">
+          <q-btn class="step1-btn" @click="loginWithMetamask">
+            <span class="step1-text">Connect to Metamask</span>
+          </q-btn>
+        </div>
+
+        <template v-if="!step1">
+          <q-form style="width: 100%" class="row">
+            <div class="amount row">
+              <q-input
+                ref="amountApprove"
+                type="number"
+                class="amount__input"
+                outlined
+                v-model="amountApprove"
+                :rules="approveRule"
+                lazy-rules
+                v-if="step2"
+              />
+            </div>
+            <div class="card__submit">
+              <q-btn
+                class="btn-submit"
+                :loading="isApprove"
+                color="purple"
+                @click="submit"
+                v-if="step2"
+              >
+                <span class="text-submit">Xác Nhận</span>
+              </q-btn>
+            </div>
+          </q-form>
+        </template>
       </template>
     </div>
   </div>
@@ -46,9 +80,36 @@ export default {
   },
   data() {
     return {
-      currentCap: 690000000,
+      currentCap: 1900000000,
       totalValue: 2300000000,
-      backers: 24,
+      backers: 60,
+
+      // step
+      step1: true,
+      step2: false,
+
+      // show popup install metamask
+      isShow: false,
+
+      wallet_address: "",
+      balance: "",
+      amountApprove: "",
+      approveRule: [
+        (val) => (val && val >= 1000) || "Mức đầu tư tối thiểu 10 triệu VNDT",
+        (val) => Number(val) <= Number(this.balance) || "Số dư không đủ",
+        (val) =>
+          Number(val) + Number(this.lockedToken) <= 500000 ||
+          "Total KAI must not be exceeded 500K",
+        (val) => val % 1000 == 0 || "Amount must be in multiples of 1,000",
+      ],
+
+      lockedToken: "",
+      showFormDeposit: false,
+      // show loading button
+      isApprove: false,
+      // instance
+      web3Infura: null,
+      web3: "",
     };
   },
 
@@ -61,6 +122,31 @@ export default {
         timeout: 2200,
         textColor: "white",
       });
+    },
+
+    async loginWithMetamask() {
+      this.web3 = this.getWeb3();
+      if (!this.web3) {
+        this.isShow = true;
+        return false;
+      }
+      this.web3.givenProvider.setMaxListeners(10000);
+      await window.ethereum.enable();
+      const accounts = await this.web3.eth.getAccounts();
+      this.wallet_address = accounts[0];
+      this.step1 = false;
+      this.step2 = true;
+      const network = await this.web3.eth.net.getNetworkType();
+      if (network == process.env.network) {
+        this.getKAIAmountFromWallet(accounts[0]);
+        this.getLockedToken();
+        this.isWithdrawContribution();
+      } else {
+        this.notify(
+          `Wrong network, please select ${process.env.network} network`,
+          "negative"
+        );
+      }
     },
   },
 };

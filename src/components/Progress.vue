@@ -2,16 +2,18 @@
   <div>
     <div class="top row justify-between">
       <p class="money text-bold" :class="{ fs16: progressSmall }">
-        {{ currentValue ? formatNumber(currentValue) : "0" }} TVND
+        {{ currentValue ? formatNumber(currentValue) : "0" }} VNDT
       </p>
-      <p class="money text-bold" :class="{ fs16: progressSmall }">{{ backers ? backers + " người đầu tư" : "" }}</p>
+      <p class="money text-bold" :class="{ fs16: progressSmall }">
+        {{ backers ? backers + " người đầu tư" : "" }}
+      </p>
     </div>
     <q-linear-progress
       :size="size ? size : '25px'"
       class="progress"
       :value="currentValue / totalValue"
       :color="color"
-      :class="{sizeProgress: progressSmall}"
+      :class="{ sizeProgress: progressSmall }"
     ></q-linear-progress>
     <div class="bottom row justify-between">
       <p class="money" :class="{ fs16: progressSmall }">
@@ -20,7 +22,7 @@
             ? Math.floor((currentValue / totalValue) * 100) + "%"
             : "0"
         }}
-        of {{ totalValue ? `${formatNumber(totalValue)} TVND` : 'TVND'}}
+        of {{ totalValue ? `${formatNumber(totalValue)} VNDT` : "VNDT" }}
       </p>
       <p class="time">{{ timeout ? `${timeout}` : "" }}</p>
     </div>
@@ -39,7 +41,7 @@ export default {
     "percent",
     "timeout",
     "size",
-    "progressSmall"
+    "progressSmall",
   ],
   mixins: [mixins],
   data() {
@@ -50,15 +52,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.fs16{
-  font-size:16px !important;
+.fs16 {
+  font-size: 16px !important;
 }
 .progress {
   margin: 0px 0px;
 }
 
-.sizeProgress{
-  font-size:13px;
+.sizeProgress {
+  font-size: 13px;
 }
 
 .money,
@@ -68,8 +70,8 @@ export default {
   line-height: 33px;
 }
 
-.time{
-  color:#00BE2A;
+.time {
+  color: #00be2a;
 }
 
 @media screen and (max-width: 1024px) {
@@ -83,9 +85,9 @@ export default {
     font-size: 24px;
   }
 
-.sizeProgress{
+  .sizeProgress {
     margin: 0px;
-  font-size:13px !important;
-}
+    font-size: 13px !important;
+  }
 }
 </style>

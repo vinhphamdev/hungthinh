@@ -1,34 +1,35 @@
 <template>
   <div>
     <div class="row q-col-gutter-x-sm q-col-gutter-y-sm q-mb-md">
-      <div class="col-xs-12 col-md-3">
+      <div class="col-xs-12 col-md-6">
         <q-img src="~assets/tienich1.png" />
       </div>
-      <div class="col-xs-12 col-md-3">
+      <div class="col-xs-12 col-md-6">
         <q-img src="~assets/tienich2.png" />
       </div>
-      <div class="col-xs-12 col-md-3">
+      <div class="col-xs-12 col-md-6">
         <q-img src="~assets/tienich3.png" />
       </div>
-      <div class="col-xs-12 col-md-3">
+      <div class="col-xs-12 col-md-6">
         <q-img src="~assets/tienich4.png" />
       </div>
     </div>
 
-    <div class="row q-col-gutter-x-md q-col-gutter-y-sm q-mb-md justify-center">
-      <template v-for="it in arr">
-        <div class="col-xs-4 col-md-2" :key="it.id">
-          <Card :title="it.title" :description="it.description" />
-        </div>
-      </template>
-    </div>
+    <div class="row justify-center">
+      <q-card class="my-card">
+        <q-card-section>
+          <div class="text-h6">Thông tin chi tiết</div>
 
-    <div class="row q-col-gutter-x-md q-col-gutter-y-sm q-mb-md justify-center">
-      <template v-for="it in arr2">
-        <div class="col-xs-4 col-md-2" :key="it.id">
-          <Card :title="it.title" :description="it.description" />
-        </div>
-      </template>
+          <ul v-for="it in arr" :key="it.id" class="list">
+            <li class="row justify-between">
+              <p>{{ it.title }}</p>
+              <p>{{ it.description }}</p>
+            </li>
+          </ul>
+        </q-card-section>
+
+        <q-separator dark />
+      </q-card>
     </div>
 
     <p class="text q-mt-md nunito" style="font-weight: 300">
@@ -83,9 +84,6 @@ export default {
           description: "Đang cọc",
           id: 5,
         },
-      ],
-
-      arr2: [
         {
           title: "Giá m2",
           description: "35.1tr / m2",
@@ -119,4 +117,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list {
+  padding-left: 0;
+}
+
+.my-card {
+  width: 550px;
+}
 </style>

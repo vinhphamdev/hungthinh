@@ -1,67 +1,44 @@
 <template>
   <div class="wrapPolicy q-ml-lg q-gutter-sm">
-    <p class="title">Lock & Earn Policy</p>
-    <div class="content column justify-between">
-      <ul>
-        <li>
-          <p class="_content firstRow" style="padding-top: 16px">
-            Participating period:
-            <span style="font-weight: 300">30th NOV 2020 to 3rd DEC 2020 </span>
-          </p>
-        </li>
-        <li>
-          <p class="_content">
-            Locking period:
-            <span style="font-weight: 300">3rd DEC 2020 to 3rd MAR 2021</span>
-          </p>
-        </li>
-        <li>
-          <p class="_content">
-            Total cap:
-            <span style="font-weight: 300">10,000,000 KAI</span>
-          </p>
-        </li>
-        <li>
-          <p class="_content">
-            Personal cap:
-            <span style="font-weight: 300">500,000 KAI</span>
-          </p>
-        </li>
-        <li>
-          <p class="_content">
-            Amount must be in multiples of
-            <span style="font-weight: 300">1,000 KAI</span>
-          </p>
-        </li>
+    <q-timeline color="secondary">
+      <q-timeline-entry heading>Tiến trình</q-timeline-entry>
 
-        <li>
-          <p class="_content">
-            Revenue share payout:
-            <span style="font-weight: 300">USDT</span>
-          </p>
-        </li>
+      <q-timeline-entry
+        title="Đã đề xuất"
+        subtitle="12/10/2019"
+        icon="done_all"
+        side="left"
+      >
+      </q-timeline-entry>
 
-        <li>
-          <p class="_content" style="padding-bottom: 0px">
-            Payout calculation:
-          </p>
-          <p>
-            <i
-              class="_content formula"
-              style="font-weight: 300; padding: 0 84px"
-              >Payout = Total revenue * (your locked KAI / total cap)
-            </i>
-          </p>
-          <p>
-            <i class="_content" style="font-weight: 300; padding-bottom: 16px"
-              >*Total revenue is the entire advertising revenue from Youtube
-              during the locking period applied for all 6 episodes of Sugar Baby
-              2 series.</i
-            >
-          </p>
-        </li>
-      </ul>
-    </div>
+      <q-timeline-entry
+        title="Bắt đầu gọi vốn"
+        subtitle="20/10/2019"
+        side="left"
+        icon="done_all"
+      >
+      </q-timeline-entry>
+
+      <q-timeline-entry
+        title="Giao dịch mua bán"
+        subtitle="21/05/2020"
+        side="left"
+        icon="done_all"
+      >
+      </q-timeline-entry>
+
+      <q-timeline-entry title="Khai thác" subtitle="12/06/2020" side="left">
+      </q-timeline-entry>
+
+      <q-timeline-entry title="Bắt đầu thanh lý" side="left">
+      </q-timeline-entry>
+
+      <q-timeline-entry title="Chốt lời" side="left"> </q-timeline-entry>
+
+      <q-timeline-entry title="Chia lời" side="left"> </q-timeline-entry>
+
+      <q-timeline-entry title="Kết thúc" side="left"> </q-timeline-entry>
+    </q-timeline>
   </div>
 </template>
 
@@ -77,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .wrapPolicy {
-  margin-top: 89px;
+  // margin-top: 89px;
 }
 .content {
   background: #fafafa;

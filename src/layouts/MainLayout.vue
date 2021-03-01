@@ -9,11 +9,10 @@
       <q-toolbar class="toolbar row justify-between items-center">
         <q-img
           src="~assets/logo.png"
-            style="width: 132px; height: 100px; cursor: pointer"
+          style="width: 268px; height: 68px; cursor: pointer"
           class="kailogo"
           @click="$router.push('/')"
         />
-
       </q-toolbar>
     </q-header>
 
@@ -24,13 +23,15 @@
 
       <div class="footer">
         <div class="footer-wrap row justify-between">
-          <div>
-            <q-img src="~assets/Mask Group 2.png" style="width: 100px" />
-          </div>
-          <div>
+          <q-img
+            src="~assets/logo.png"
+            style="width: 268px; height: 68px; cursor: pointer"
+            class="kailogo"
+            @click="$router.push('/')"
+          />
+          <!-- <div>
             <p style="color: white">CONTACT</p>
-            <p style="color: white">Hello@kardiachain.io</p>
-          </div>
+          </div> -->
         </div>
       </div>
     </q-page-container>
@@ -307,9 +308,9 @@ export default {
 
 // mobile screen
 @media screen and (max-width: 740px) {
-  .wrapper{
-    width:100%;
-    padding:0px 20px;
+  .wrapper {
+    width: 100%;
+    padding: 0px 20px;
   }
 
   .kailogo {
