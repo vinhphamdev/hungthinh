@@ -6,7 +6,9 @@
   "author": "Vinh Pham <vinhphamdev@gmail.com>",
   "private": true,
   "scripts": {
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "cross-env QENV=development quasar dev",
+    "build": "cross-env QENV=production quasar build"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
@@ -21,7 +23,8 @@
     "web3": "^1.2.11"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0"
+    "@quasar/app": "^2.0.0",
+    "@quasar/quasar-app-extension-qenv": "^1.1.0"
   },
   "browserslist": [
     "last 10 Chrome versions",

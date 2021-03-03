@@ -19,7 +19,7 @@
       <p class="money" :class="{ fs16: progressSmall }">
         {{
           currentValue
-            ? Math.floor((currentValue / totalValue) * 100) + "%"
+            ? ((currentValue / totalValue) * 100).toFixed(2) + "%"
             : "0"
         }}
         of {{ totalValue ? `${formatNumber(totalValue)} VNDT` : "VNDT" }}

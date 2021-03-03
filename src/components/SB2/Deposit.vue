@@ -73,6 +73,9 @@
 import Progress from "../Progress";
 import mixins from "../../helper/mixin";
 
+import Web3 from "web3";
+import { SB2_ABI, ERC20_ABI, MINI_ABI } from "../../boot/abi";
+
 export default {
   mixins: [mixins],
   components: {
@@ -80,9 +83,9 @@ export default {
   },
   data() {
     return {
-      currentCap: 1900000000,
+      currentCap: 0,
       totalValue: 2300000000,
-      backers: 60,
+      backers: 0,
 
       // step
       step1: true,
@@ -97,9 +100,6 @@ export default {
       approveRule: [
         (val) => (val && val >= 1000) || "Mức đầu tư tối thiểu 10 triệu VNDT",
         (val) => Number(val) <= Number(this.balance) || "Số dư không đủ",
-        (val) =>
-          Number(val) + Number(this.lockedToken) <= 500000 ||
-          "Total KAI must not be exceeded 500K",
         (val) => val % 1000 == 0 || "Amount must be in multiples of 1,000",
       ],
 
@@ -112,6 +112,12 @@ export default {
       web3: "",
     };
   },
+  async created () {
+    this.web3Infura = await new Web3(
+      new Web3.providers.HttpProvider(process.env.Infura)
+    );
+    this.getCurrentCap();
+  },
 
   methods: {
     notify(msg, type = "positive") {
@@ -123,6 +129,17 @@ export default {
         textColor: "white",
       });
     },
+
+    async getKAIAmountFromWallet(walletAddress) {
+      let contract = new this.web3.eth.Contract(
+        MINI_ABI,
+        process.env.ERC20_SMC_ADDRESS
+      );
+      // Call balanceOf function
+      let balance = await contract.methods.balanceOf(walletAddress).call();
+      this.balance = this.web3.utils.fromWei(balance, "ether");
+    },
+
 
     async loginWithMetamask() {
       this.web3 = this.getWeb3();
@@ -139,13 +156,97 @@ export default {
       const network = await this.web3.eth.net.getNetworkType();
       if (network == process.env.network) {
         this.getKAIAmountFromWallet(accounts[0]);
-        this.getLockedToken();
-        this.isWithdrawContribution();
       } else {
         this.notify(
           `Wrong network, please select ${process.env.network} network`,
           "negative"
         );
+      }
+    },
+
+
+     async validNetwork() {
+      const network = await this.web3.eth.net.getNetworkType();
+      if (network == process.env.network) {
+        return true;
+      } else if (network != process.env.network) {
+        this.notify(
+          `Wrong Network, Please select ${process.env.network} network`,
+          "negative"
+        );
+        return false;
+      }
+    },
+
+    async getCurrentCap() {
+      const SB2Contract = await new this.web3Infura.eth.Contract(
+        SB2_ABI,
+        process.env.SB2SMC
+      );
+      let current = await SB2Contract.methods.currentCap().call();
+
+      this.backers = await SB2Contract.methods.totalBackers().call();
+
+      this.currentCap = this.web3Infura.utils.fromWei(current, "ether");
+    },
+
+    async submit() {
+      const validNetwork = await this.validNetwork();
+      if (!validNetwork) return;
+
+      this.$refs.amountApprove.validate();
+
+      if (this.$refs.amountApprove.hasError) {
+        this.formHasError = true;
+        return;
+      }
+
+      const _amount = this.web3.utils.toWei(this.amountApprove, "ether");
+      let vm = this;
+      try {
+        const contractToken = await new this.web3.eth.Contract(
+          ERC20_ABI,
+          process.env.ERC20_SMC_ADDRESS
+        );
+
+        const contract = await new this.web3.eth.Contract(
+          SB2_ABI,
+          process.env.SB2SMC
+        );
+
+        vm.isApprove = true;
+
+        const estimateGasApprove = await contractToken.methods
+          .approve(process.env.SB2SMC, _amount)
+          .estimateGas({ from: process.env.SB2SMC });
+
+        let approve = await contractToken.methods
+          .approve(process.env.SB2SMC, _amount)
+          .send({
+            from: vm.wallet_address,
+            gas: estimateGasApprove + 1,
+          });
+
+        console.log(_amount);
+
+        if (approve.status) {
+          const contribute = await contract.methods
+            .contributeKAI(_amount)
+            .send({
+              from: vm.wallet_address,
+              gas: 300000,
+            });
+
+          vm.textApprovePending = false;
+          vm.getKAIAmountFromWallet(vm.wallet_address);
+          vm.getCurrentCap();
+          vm.notify("Successful Deposit");
+          vm.isApprove = false;
+        }
+      } catch (e) {
+        console.log(e);
+        vm.isApprove = false;
+        vm.notify("Transaction Failed", "negative");
       }
     },
   },
